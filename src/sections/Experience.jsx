@@ -1,81 +1,93 @@
-import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Briefcase } from "lucide-react";
 
-const Experience = () => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+const experiences = [
+    {
+        id: 1,
+        role: "eCommerce Team Lead",
+        company: "Company Name",
+        period: "2023 - Present",
+        description: "Leading a team of eCommerce specialists, optimizing product listings, and driving sales growth through data-driven strategies."
+    },
+    {
+        id: 2,
+        role: "Data Analyst",
+        company: "Company Name",
+        period: "2022 - 2023",
+        description: "Analyzed business data to identify trends, created dashboards for stakeholders, and improved data quality processes."
+    }
+];
 
-    const jobs = [
-        {
-            title: 'Team Lead - eCommerce',
-            company: 'Reliance Jiomart Pvt Ltd',
-            range: 'July 2023 - Present',
-            description: [
-                'Leading the eCommerce team to drive operational excellence and customer satisfaction.',
-                'Managing daily operations, team performance, and workflow optimization.',
-                'Analyzing data to improve processes and achieve business targets.'
-            ]
-        },
-        {
-            title: 'Operations Staff',
-            company: 'Inox Leisure Pvt Ltd',
-            range: 'Mar 2019 - July 2023',
-            description: [
-                'Ensured smooth daily operations and high-quality customer service standards.',
-                'Collaborated with the team to handle logistics and operational challenges effectively.',
-                'Maintained operational records and supported management in daily reporting.'
-            ]
-        }
-    ];
+const ExperienceCard = ({ exp }) => {
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <section id="experience" className="section container" ref={ref}>
-            <motion.h2
-                style={{ fontSize: '2rem', marginBottom: '3rem', display: 'flex', alignItems: 'center' }}
-                initial={{ opacity: 0, x: -50 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5 }}
-            >
-                <span style={{ color: 'var(--primary)', marginRight: '1rem' }}>02.</span>
-                Where I've Worked
-                <span style={{ height: '1px', background: 'var(--glass-border)', flex: '1', marginLeft: '1rem', maxWidth: '300px' }}></span>
-            </motion.h2>
+        <motion.div
+            layout
+            className="glass rounded-xl overflow-hidden mb-6 cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+        >
+            <div className="p-6 flex justify-between items-start">
+                <div className="flex gap-4">
+                    <div className="mt-1 p-2 bg-violet-neon/20 rounded-lg text-violet-neon">
+                        <Briefcase size={24} />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold text-white">{exp.role}</h3>
+                        <p className="text-violet-300">{exp.company}</p>
+                        <p className="text-sm text-gray-400 mt-1">{exp.period}</p>
+                    </div>
+                </div>
+                <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <ChevronDown className="text-violet-400" />
+                </motion.div>
+            </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                {jobs.map((job, index) => (
+            <AnimatePresence>
+                {isOpen && (
                     <motion.div
-                        key={index}
-                        className="glass-card"
-                        style={{ padding: '2rem' }}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.5, delay: 0.2 + (index * 0.1) }}
-                        whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.08)' }}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="px-6 pb-6 pt-0 border-t border-white/10"
                     >
-                        <h3 style={{ marginBottom: '0.5rem', fontSize: '1.4rem' }}>
-                            {job.title} <span style={{ color: 'var(--primary)' }}>@ {job.company}</span>
-                        </h3>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem', fontFamily: 'monospace' }}>
-                            {job.range}
+                        <p className="text-gray-300 mt-4 leading-relaxed">
+                            {exp.description}
                         </p>
-                        <ul style={{ listStyle: 'none' }}>
-                            {job.description.map((desc, i) => (
-                                <li key={i} style={{
-                                    color: 'var(--text-muted)',
-                                    marginBottom: '10px',
-                                    display: 'flex',
-                                    alignItems: 'baseline'
-                                }}>
-                                    <span style={{ color: 'var(--secondary)', marginRight: '15px', fontSize: '12px' }}>▹</span>
-                                    {desc}
-                                </li>
-                            ))}
-                        </ul>
                     </motion.div>
-                ))}
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+};
+
+export const Experience = () => {
+    return (
+        <section id="experience" className="py-20 px-6 relative z-10">
+            <div className="max-w-4xl mx-auto">
+                <motion.h2
+                    initial={{ opacity: 0, x: -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="text-4xl md:text-5xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-violet-light to-violet-neon"
+                >
+                    Experience
+                </motion.h2>
+
+                <div className="relative border-l-2 border-violet-neon/30 ml-4 md:ml-8 pl-8 md:pl-12 py-4">
+                    {experiences.map((exp) => (
+                        <ExperienceCard key={exp.id} exp={exp} />
+                    ))}
+                </div>
             </div>
         </section>
     );
 };
-
-export default Experience;

@@ -1,23 +1,24 @@
-import React from 'react';
-import Navbar from './components/Navbar';
-import Hero from './sections/Hero';
-import About from './sections/About';
-import Experience from './sections/Experience';
-import Contact from './sections/Contact';
-import Background3D from './components/Background3D';
-import './index.css';
+import React from "react";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
+import { Hero } from "./sections/Hero";
+import { About } from "./sections/About";
+import { Experience } from "./sections/Experience";
+import { Skills } from "./sections/Skills";
+import { Contact } from "./sections/Contact";
 
 function App() {
   return (
-    <div className="app">
-      <Background3D />
+    <div className="bg-violet-main min-h-screen text-white selection:bg-violet-neon selection:text-white overflow-hidden">
       <Navbar />
-      <main style={{ position: 'relative', zIndex: 1 }}>
+      <main>
         <Hero />
         <About />
         <Experience />
+        <Skills />
         <Contact />
       </main>
+      <Footer />
     </div>
   );
 }
